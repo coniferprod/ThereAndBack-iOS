@@ -44,6 +44,7 @@ is a good idea) and the actual scheme names.
 
 Here is an example in property list format:
 
+```
 <key>CFBundleURLTypes</key>
 <array>
   <dict>
@@ -55,16 +56,19 @@ Here is an example in property list format:
     </array>
   </dict>
 </array>
+```
 
 ("CF" stands for "Core Foundation".)
 
 If you could express this in Swift instead of the XML-based property list format,
 it would be like this:
 
+```swift
 let bundleURLTypes: [[String: [String]]] = [
     "bundleURLName": "com.mycompany.App2",
     "bundleURLSchemes": ["app2"]
 ]
+```
 
 ## How to check for the existence of a URL scheme
 
@@ -73,29 +77,32 @@ is a handler for a specific URL. Here is a helper function in Swift to determine
 if URLs with a given scheme can be opened. You don't have to specify a full URL,
 just the scheme.
 
+```swift
 func isSchemeAvailable(scheme: String) -> Bool {
     if let url = "\(scheme)://" {
         return UIApplication.shared.canOpenURL(scheme)
     }
     return false
 }
+```
 
 Since iOS 9, the call to canOpenURL will fail unless you have specified 
 the URL schemes you are allowed to query. This is done by adding the
 LSApplicationQueriesSchemes key in the app's Info.plist file.
 
+```
 <key>LSApplicationQueriesSchemes</key>
 <array>
     <string>app2</string>
 </array>
-
+```
 
 ## Starting the helper app from the main app
 
 Once you know there is a handler for the URL scheme, you can try to launch
 the handler app:
 
-openURL:options:completionHandler:
+`openURL:options:completionHandler:`
 
 Note that the old openURL method is deprecated since iOS 10, so if you're 
 targeting iOS 10 or later, you should use the method with the completion
@@ -104,6 +111,7 @@ macro.
 
 Use the helper function before you call canOpenURL:
 
+```swift
 let app2Scheme = "app2"
 let app2URL = "\(app2Scheme)"
 if isSchemeAvailable(app2Scheme) {
@@ -113,10 +121,11 @@ if isSchemeAvailable(app2Scheme) {
         })        
     }
 }
+```
 
 ## Handling the URL request in the helper app
 
-
+TBD
 
 ## Returning from the helper app to the main app
 
@@ -127,8 +136,8 @@ with the helper as you did with the main app:
 
 * Declare in the helper app that you will want to query the main app's scheme, app1
 * Register the app1 scheme in the main app
-* Start the main app (most likely it is backgrounded at this point) using openURL:options:completionHandler:
-* Handle the URL request in the helper app, in application:didFinishLaunchingWithOptions:
+* Start the main app (most likely it is backgrounded at this point) using `openURL:options:completionHandler:`
+* Handle the URL request in the helper app, in `application:didFinishLaunchingWithOptions:`
 
 # Adding a verification mechanism
 
@@ -142,7 +151,6 @@ starting the main app.
 
 # References
 
-https://useyourloaf.com/blog/querying-url-schemes-with-canopenurl/
-https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Inter-AppCommunication/Inter-AppCommunication.html
-https://tools.ietf.org/html/rfc3986
-
+* https://useyourloaf.com/blog/querying-url-schemes-with-canopenurl/
+* https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Inter-AppCommunication/Inter-AppCommunication.html
+* https://tools.ietf.org/html/rfc3986
