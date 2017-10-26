@@ -26,7 +26,7 @@ The actual URL body is up to the apps themselves, but it needs to be carefully
 coordinated.
 
 Some URL schemes are reserved by Apple in iOS, and you cannot register a handler
-for them. Sensibly, these include at least http and https, mailto, tel and sms,
+for them. Sensibly, these include at least `http` and `https`, `mailto`, `tel` and `sms`,
 and any attempt to use them will result in the Apple-defined handler for them to
 be started (Safari, Mail, Phone, and Messages for those schemes mentioned above).
 
@@ -37,8 +37,8 @@ because it could be a way to prevent an app from working as intended.
 
 ## How to register a URL scheme in iOS
 
-To register one or more URL schemes, you need to add the CFBundleURLTypes key to your
-app's Info.plist file. The value of the key must be an array of dictionaries.
+To register one or more URL schemes, you need to add the `CFBundleURLTypes key to your
+app's `Info.plist` file. The value of the key must be an array of dictionaries.
 Each element in the array defines a name for the URL scheme (a reverse domain name
 is a good idea) and the actual scheme names.
 
@@ -61,7 +61,7 @@ Here is an example in property list format:
 ("CF" stands for "Core Foundation".)
 
 If you could express this in Swift instead of the XML-based property list format,
-it would be like this:
+it would be something like this:
 
 ```swift
 let bundleURLTypes: [[String: [String]]] = [
@@ -70,9 +70,9 @@ let bundleURLTypes: [[String: [String]]] = [
 ]
 ```
 
-## How to check for the existence of a URL scheme
+## How to check if there is a handler for a given URL scheme
 
-You can call the canOpenURL of the shared UIApplication object to determine if there 
+You can call the `canOpenURL` of the shared `UIApplication` object in iOS to determine if there 
 is a handler for a specific URL. Here is a helper function in Swift to determine
 if URLs with a given scheme can be opened. You don't have to specify a full URL,
 just the scheme.
@@ -86,9 +86,9 @@ func isSchemeAvailable(scheme: String) -> Bool {
 }
 ```
 
-Since iOS 9, the call to canOpenURL will fail unless you have specified 
+Since iOS 9, the call to `canOpenURL` will fail unless you have specified 
 the URL schemes you are allowed to query. This is done by adding the
-LSApplicationQueriesSchemes key in the app's Info.plist file.
+`LSApplicationQueriesSchemes` key in the app's `Info.plist` file.
 
 ```
 <key>LSApplicationQueriesSchemes</key>
@@ -104,12 +104,12 @@ the handler app:
 
 `openURL:options:completionHandler:`
 
-Note that the old openURL method is deprecated since iOS 10, so if you're 
+Note that the old `openURL` method is deprecated since iOS 10, so if you're 
 targeting iOS 10 or later, you should use the method with the completion
 handler. If you're targeting an earlier version of iOS, use an availability
 macro.
 
-Use the helper function before you call canOpenURL:
+Use the helper function before you call `canOpenURL`:
 
 ```swift
 let app2Scheme = "app2"
@@ -134,8 +134,8 @@ to the main app, you will need to open the appropriate URL with the
 right scheme. For this you will obviously need to perform the same steps
 with the helper as you did with the main app:
 
-* Declare in the helper app that you will want to query the main app's scheme, app1
-* Register the app1 scheme in the main app
+* Declare in the helper app that you will want to query the main app's scheme, `app1`
+* Register the `app1` scheme in the main app
 * Start the main app (most likely it is backgrounded at this point) using `openURL:options:completionHandler:`
 * Handle the URL request in the helper app, in `application:didFinishLaunchingWithOptions:`
 
