@@ -64,7 +64,7 @@ If you could express this in Swift instead of the XML-based property list format
 it would be something like this:
 
 ```swift
-let bundleURLTypes: [[String: [String]]] = [
+let bundleURLTypes: [String: Any] = [
     "bundleURLName": "com.mycompany.App2",
     "bundleURLSchemes": ["app2"]
 ]
