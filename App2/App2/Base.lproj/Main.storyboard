@@ -18,26 +18,45 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n3E-EV-F9v">
-                                <rect key="frame" x="93.5" y="279" width="133" height="30"/>
-                                <state key="normal" title="Back to Helper App"/>
+                                <rect key="frame" x="99.5" y="279" width="121" height="30"/>
+                                <state key="normal" title="Back to Main App"/>
                                 <connections>
                                     <action selector="backToMainApp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qtv-tI-VrV"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Verified" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Rf-Sk-Jgm">
+                                <rect key="frame" x="131" y="250" width="58.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UUID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lNc-BN-SKi">
+                                <rect key="frame" x="139.5" y="221" width="41" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="n3E-EV-F9v" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="F1G-Tq-BEs"/>
+                            <constraint firstItem="lNc-BN-SKi" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Mzf-3o-hIJ"/>
+                            <constraint firstItem="9Rf-Sk-Jgm" firstAttribute="top" secondItem="lNc-BN-SKi" secondAttribute="bottom" constant="8" id="ORT-bB-j3w"/>
+                            <constraint firstItem="9Rf-Sk-Jgm" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="qm4-Fy-aCj"/>
+                            <constraint firstItem="n3E-EV-F9v" firstAttribute="top" secondItem="9Rf-Sk-Jgm" secondAttribute="bottom" constant="8" id="uK8-MY-4Ps"/>
                             <constraint firstItem="n3E-EV-F9v" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="v4o-wG-tj6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="backButton" destination="n3E-EV-F9v" id="Hac-3x-7vG"/>
+                        <outlet property="identifierLabel" destination="lNc-BN-SKi" id="rsv-Ae-8X5"/>
+                        <outlet property="verifiedLabel" destination="9Rf-Sk-Jgm" id="k12-sJ-UKI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="33.75" y="61.267605633802816"/>
         </scene>
     </scenes>
 </document>

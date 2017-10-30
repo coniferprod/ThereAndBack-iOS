@@ -80,17 +80,17 @@ If the URL scheme hasn't been registered, and try to open a URL that has the sch
 and return false, with a message on the console:
 
 ```
-canOpenURL: failed for URL: "app2://" - error: "The operation couldn’t be completed. (OSStatus error -10814.)"
+canOpenURL: failed for URL: "app2:///" - error: "The operation couldn’t be completed. (OSStatus error -10814.)"
 ```
 
 Here is a helper function in Swift to determine
-if URLs with a given scheme can be opened. You don't have to specify a full URL,
-just the scheme.
+if URLs with a given scheme can be opened. You can specify a minimal but still 
+complete URL with the scheme in place.
 
 ```swift
 func isSchemeAvailable(_ scheme: String) -> Bool {
     var result = false
-    if let url = URL(string: "\(scheme)://") {
+    if let url = URL(string: "\(scheme):///") {
         result = UIApplication.shared.canOpenURL(url)
         print("isSchemeAvailable? \(scheme) = \(result)")
     }
@@ -102,7 +102,7 @@ Since iOS 9, the call to `canOpenURL` will fail unless you have specified
 the URL schemes you are allowed to query:
 
 ```
-canOpenURL: failed for URL: "app2://" - error: "This app is not allowed to query for scheme app2"
+canOpenURL: failed for URL: "app2:///" - error: "This app is not allowed to query for scheme app2"
 ```
 
 You ask for permission to query by adding the
@@ -131,7 +131,7 @@ Use the helper function before you call `canOpenURL`:
 
 ```swift
 let app2Scheme = "app2"
-let app2URL = "\(app2Scheme)://foobar"
+let app2URL = "\(app2Scheme):///foobar"
 if isSchemeAvailable(app2Scheme) {
     if let url = URL(string: app2URL) {
         UIApplication.shared.open(url, options: [:], completionHandler: { (success) in
@@ -143,7 +143,59 @@ if isSchemeAvailable(app2Scheme) {
 
 ## Handling the URL request in the helper app
 
-TBD
+In most cases you will want to pass some information from the main app to the
+helper app using the launch URL. You'll need to parse the URL when the helper
+app is launched.
+
+Let's say you launch the helper app and need to include a UUID and a parameter. 
+The launch URL could look something like this:
+
+`app2:///6e68faa8-7b82-461b-8a8b-b2a0c0bed0cb?verified=true
+
+Note that the host part of the URL is empty.
+
+If you need to generate UUIDs on the command line for testing on macOS,
+use the `uuidgen` command. If you want to fold the result to lower case,
+combine it with the `tr` command:
+
+`uuidgen | tr '[:upper:]' '[:lower:]'`
+
+The launch URL will end up in the launch options of the helper app, and you
+can process it in the `application:didFinishLaunchingWithOptions:` method
+of your application delegate. The launch option key is `UIApplicationLaunchOptionsKey.url`.
+
+```
+func application(_ application: UIApplication, 
+                 didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    if let options = launchOptions {
+        if let url = options[UIApplicationLaunchOptionsKey.url] {
+            debugPrint("Launched with URL: \(url)")
+        }
+    }
+    
+    return true
+}
+```
+
+## Testing the launch
+
+When you have run your helper app at least once to get its URL scheme registered,
+you will want to test launching it from the URL. The easiest way to do this is
+to load a URL in Safari, either in the simulator or in an actual device.
+
+Just type `app2:///something` in the location field of Safari. You will be asked
+to verify if you want the helper app to open.
+
+If you want to log something or stop at a breakpoint, you will need to start
+the helper app from Xcode and have it wait for the app to be launched manually.
+Go to the Run scheme of your app, then in the Info section select Launch > Wait
+for executable to be launched.
+
+When you run the helper app in Xcode, you will see "Waiting to attach to XXX
+on YYY" in the Xcode display, where XXX is your app and YYY is your device.
+Now if you enter your app's URL in Safari, the Xcode debugger will attach to
+your app and you will see what you have logged in the Xcode log area.
+
 
 ## Returning from the helper app to the main app
 

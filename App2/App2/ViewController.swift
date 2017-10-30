@@ -2,12 +2,23 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet weak var backButton: UIButton!
-
+    @IBOutlet weak var identifierLabel: UILabel!
+    @IBOutlet weak var verifiedLabel: UILabel!
+    
     let mainAppScheme = "app1"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        
+        identifierLabel.text = "identifier = \(appDelegate.identifier)"
+
     }
 
     override func didReceiveMemoryWarning() {

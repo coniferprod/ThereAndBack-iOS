@@ -17,7 +17,11 @@ class ViewController: UIViewController {
     }
 
     @IBAction func startHelperApp(_ sender: Any) {
-        guard let helperAppURL = URL(string: "\(helperAppScheme)://foobar") else {
+        // Generate a UUID string in lowercase
+        let uuid = UUID().uuidString.lowercased()
+        debugPrint("UUID = \(uuid)")
+        
+        guard let helperAppURL = URL(string: "\(helperAppScheme):///\(uuid)") else {
             return
         }
         

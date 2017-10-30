@@ -34,14 +34,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        var verified = false
+        if let queryParameters = url.queryParameters {
+            if let verifiedValue = queryParameters["verified"]?.lowercased() {
+                if verifiedValue == "true" {
+                    verified = true
+                }
+            }
+        }
+        
+        debugPrint("verified = \(verified)")
+        
+        return true
+    }
+    
 }
 
 
 func isSchemeAvailable(_ scheme: String) -> Bool {
     var result = false
-    if let url = URL(string: "\(scheme)://") {
+    if let url = URL(string: "\(scheme):///") {
         result = UIApplication.shared.canOpenURL(url)
         print("isSchemeAvailable? \(scheme) = \(result)")
     }
     return result
 }
+
+// Extension to parse query parameters from a URL
+// Adapted from https://stackoverflow.com/questions/41421686/swift-get-url-parameters
+extension URL {
+    public var queryParameters: [String: String]? {
+        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: true),
+            let queryItems = components.queryItems else {
+                return nil
+        }
+        
+        var parameters = [String: String]()
+        for item in queryItems {
+            parameters[item.name] = item.value
+        }
+        
+        return parameters
+    }
+}
+
