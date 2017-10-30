@@ -41,5 +41,20 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>app1</string>
+    </array>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.coniferproductions.App2</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>app2</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>

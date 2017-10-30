@@ -6,7 +6,8 @@ Demonstrates communication between two apps in iOS.
 
 If you have a scenario where two apps rely on each other, or one app delegates to 
 a helper app, you need to establish a way of communicating with them. As there is
-no inter-process mechanism in iOS, app-to-app or "inter-app" communication is established 
+no inter-process mechanism in iOS (at least anything that is fully sanctioned by Apple
+and doesn't require UNIX wizardry), app-to-app or "inter-app" communication is established 
 by using a URL to launch a second app from a running app.
 
 For an app to be launched with a URL you need to register a URL scheme for the app
@@ -73,22 +74,39 @@ let bundleURLTypes: [String: Any] = [
 ## How to check if there is a handler for a given URL scheme
 
 You can call the `canOpenURL` of the shared `UIApplication` object in iOS to determine if there 
-is a handler for a specific URL. Here is a helper function in Swift to determine
+is a handler for a specific URL. 
+
+If the URL scheme hasn't been registered, and try to open a URL that has the schema, the call will fail
+and return false, with a message on the console:
+
+```
+canOpenURL: failed for URL: "app2://" - error: "The operation couldn’t be completed. (OSStatus error -10814.)"
+```
+
+Here is a helper function in Swift to determine
 if URLs with a given scheme can be opened. You don't have to specify a full URL,
 just the scheme.
 
 ```swift
-func isSchemeAvailable(scheme: String) -> Bool {
-    if let url = "\(scheme)://" {
-        return UIApplication.shared.canOpenURL(scheme)
+func isSchemeAvailable(_ scheme: String) -> Bool {
+    var result = false
+    if let url = URL(string: "\(scheme)://") {
+        result = UIApplication.shared.canOpenURL(url)
+        print("isSchemeAvailable? \(scheme) = \(result)")
     }
-    return false
+    return result
 }
 ```
 
 Since iOS 9, the call to `canOpenURL` will fail unless you have specified 
-the URL schemes you are allowed to query. This is done by adding the
-`LSApplicationQueriesSchemes` key in the app's `Info.plist` file.
+the URL schemes you are allowed to query:
+
+```
+canOpenURL: failed for URL: "app2://" - error: "This app is not allowed to query for scheme app2"
+```
+
+You ask for permission to query by adding the
+`LSApplicationQueriesSchemes` key in the app's `Info.plist` file:
 
 ```
 <key>LSApplicationQueriesSchemes</key>
@@ -113,7 +131,7 @@ Use the helper function before you call `canOpenURL`:
 
 ```swift
 let app2Scheme = "app2"
-let app2URL = "\(app2Scheme)"
+let app2URL = "\(app2Scheme)://foobar"
 if isSchemeAvailable(app2Scheme) {
     if let url = URL(string: app2URL) {
         UIApplication.shared.open(url, options: [:], completionHandler: { (success) in
